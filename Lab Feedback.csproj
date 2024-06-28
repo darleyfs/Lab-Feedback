@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <RootNamespace>Lab_Feedback</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="WinFormsSyntaxHighlighter">
+      <HintPath>lib\WinFormsSyntaxHighlighter.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
