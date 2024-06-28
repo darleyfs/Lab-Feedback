@@ -9,6 +9,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using WinFormsSyntaxHighlighter;
 using System.DirectoryServices.ActiveDirectory;
 using System.Xml.Linq;
+using static System.Net.WebRequestMethods;
 
 namespace Lab_Feedback
 {
@@ -191,17 +192,12 @@ namespace Lab_Feedback
 
         private void ListBoxAssignments_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Remove all existing labels
-            foreach (var button in panelCodeView.Controls.OfType<Label>().ToArray())
-            {
-                if (button.Name == "labelCodeView") continue;
+            RemoveExistingLabels();
 
-                panelCodeView.Controls.Remove(button);
-                button.Dispose();
-            }
+            if (listBoxAssignments.SelectedItem is not Assignment selectedAssignment) return;
 
-            var name = ((Assignment)listBoxAssignments.SelectedItem!)?.Name;
-            var path = ((Assignment)listBoxAssignments.SelectedItem!)?.Folder;
+            var name = selectedAssignment.Name;
+            var path = selectedAssignment.Folder;
             string? filePath = null;
 
             // Ignore boiler-plate files
@@ -216,24 +212,42 @@ namespace Lab_Feedback
 
             if (name == null || path == null) return;
 
-            if (name.StartsWith("Lab "))
+            if (name.StartsWith("Lab ") || name.StartsWith("Practical"))
             {
                 PopulateCodeViewLabels(name, path, exclusions);
-                filePath = FileHandler.SearchFile(path, "Submission.cpp");
-            }
-            else if (name.StartsWith("Practical"))
-            {
-                PopulateCodeViewLabels(name, path, exclusions);
-                filePath = FileHandler.SearchFile(path, name + ".cpp");
+                filePath = name.StartsWith("Lab ")
+                    ? FileHandler.SearchFile(path, "Submission.cpp")
+                    : FileHandler.SearchFile(path, $"{name}.cpp");
             }
 
             if (string.IsNullOrEmpty(path)) return;
 
-            var text = File.ReadAllText(@filePath);
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                var text = System.IO.File.ReadAllText(@filePath);
 
-            richTextBoxCodeView.Text = (string.IsNullOrEmpty(text)) ? "" : text;
-            buttonOpenWindow.Visible = true;
+                richTextBoxCodeView.Text = (string.IsNullOrEmpty(text)) ? "" : text;
+                buttonOpenWindow.Visible = true;
+            }
+            else
+            {
+                MessageBox.Show( "There may be a problem with the folder structure.\n\nDo you want to open this folder? (This isn't implemented yet)", "Error opening file path.");
+            }
         }
+
+        private void RemoveExistingLabels()
+        {
+            var labelsToRemove = panelCodeView.Controls.OfType<Label>()
+                .Where(label => label.Name != "labelCodeView")
+                .ToArray();
+
+            foreach (var label in labelsToRemove)
+            {
+                panelCodeView.Controls.Remove(label);
+                label.Dispose();
+            }
+        }
+
 
         private Label CreateCodeViewLabel(string filepath, int xPos, bool first = false)
         {
@@ -361,7 +375,7 @@ namespace Lab_Feedback
 
 
             var path = (string)((Label)sender).Tag!;
-            var text = File.ReadAllText(@path);
+            var text = System.IO.File.ReadAllText(@path);
 
             richTextBoxCodeView.Text = (string.IsNullOrEmpty(text)) ? "" : text;
         }
