@@ -49,7 +49,7 @@ namespace Lab_Feedback {
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Handle exceptions if needed
             }

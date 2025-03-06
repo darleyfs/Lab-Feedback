@@ -66,6 +66,38 @@ namespace Lab_Feedback
             return cppFiles;
         }
 
+        public static List<string> SearchHeaderFiles(string path, List<string> exclusions = null)
+        {
+            // If exclusions is null, initialize it as an empty HashSet
+            var exclusionSet = exclusions != null
+                ? new HashSet<string>(exclusions, StringComparer.OrdinalIgnoreCase)
+                : new HashSet<string>();
+
+            // List to hold the paths of the found .cpp files
+            var studentFiles = new List<string>();
+
+            // Search for all .cpp and header files in the specified path and subdirectories
+            var headerFiles = Directory.GetFiles(path, "*.h", SearchOption.AllDirectories);
+            var cppFiles = Directory.GetFiles(path, "*.cpp", SearchOption.AllDirectories);
+
+            var files = headerFiles.Concat(cppFiles).ToArray();
+
+            foreach (var file in files)
+            {
+                // Get the file name without the directory path
+                var fileName = Path.GetFileName(file);
+
+                // Add the file to the list if it's not in the exclusions set
+                if (!exclusionSet.Contains(fileName))
+                {
+                    studentFiles.Add(file);
+                }
+            }
+
+            return studentFiles;
+        }
+
+
         public static string? GetSubfolderFromPath(string path, string? subFolder)
         {
             if (subFolder == null) return "";

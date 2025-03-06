@@ -1,6 +1,6 @@
 namespace Lab_Feedback
 {
-    internal static class Program
+    internal static partial class Program
     {
         /// <summary>
         ///  The main entry point for the application.
@@ -18,8 +18,8 @@ namespace Lab_Feedback
             Application.Run(new Form1());
         }
 
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-
-        private static extern bool SetProcessDPIAware();
+        [System.Runtime.InteropServices.LibraryImport("user32.dll")]
+        [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+        private static partial bool SetProcessDPIAware();
     }
 }

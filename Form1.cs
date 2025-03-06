@@ -172,11 +172,11 @@ namespace Lab_Feedback
         {
             var path = ((Student)listBoxStudents.SelectedItem!)?.Folder;
 
-            // Search folder for ZIP files, extract and delete them
-            ZipFileHandler.ExtractZipFilesInFolder(path);
-
             // Search folder for Lab projects
             if (path == null) return;
+
+            // Search folder for ZIP files, extract and delete them
+            ZipFileHandler.ExtractZipFilesInFolder(path);
 
             var assignments = Assignment.FindLabOrPracticalSubfolders(path);
 
@@ -200,24 +200,56 @@ namespace Lab_Feedback
             var path = selectedAssignment.Folder;
             string? filePath = null;
 
+            if (name == null || path == null) return;
+
             // Ignore boiler-plate files
             var exclusions = new List<string>
             {
                 "Source.cpp",
                 "Test.cpp",
+                "Test.h",
                 "Tester.cpp",
+                "Tester.h",
                 "Utility.cpp",
-                "ShopUtils.cpp"
+                "Utility.h",
+                "UI.h",
+                "ShopUtils.cpp",
+                "ShopUtils.h",
+                "LabUI.h",
+                "resource.h",
+                "LLMChecker.h",
+                "ProgressBar.h",
+                "Results.h",
+                "ResultsLib.h",
+                "LabTestUtils.h",
+                "Console.h",
+                "Console.cpp"
             };
-
-            if (name == null || path == null) return;
 
             if (name.StartsWith("Lab ") || name.StartsWith("Practical"))
             {
                 PopulateCodeViewLabels(name, path, exclusions);
-                filePath = name.StartsWith("Lab ")
-                    ? FileHandler.SearchFile(path, "Submission.cpp")
-                    : FileHandler.SearchFile(path, $"{name}.cpp");
+
+                // If the project is a lab
+                if (name.StartsWith("Lab "))
+                {
+                    // First, check for StudentWork.h (new format)
+                    if (FileHandler.SearchFile(path, "StudentWork.h") != "")
+                    {
+                        filePath = FileHandler.SearchFile(path, "StudentWork.h");
+                    }
+
+                    // Then, check for Submission.cpp (old format)
+                    if (FileHandler.SearchFile(path, "Submission.cpp") != "")
+                    {
+                        filePath = FileHandler.SearchFile(path, "Submission.cpp");
+                    }
+                }
+                else
+                {
+                    // Otherwise, it's a Practical and use the CPP.
+                    filePath = FileHandler.SearchFile(path, $"{name}.cpp");
+                }
             }
 
             if (string.IsNullOrEmpty(path)) return;
@@ -252,16 +284,17 @@ namespace Lab_Feedback
         private Label CreateCodeViewLabel(string filepath, int xPos, bool first = false)
         {
             // Create a new label
-            var labelFileName = new Label();
+            var labelFileName = new Label {
+                // Fill out the file properties
+                Text = Path.GetFileName(filepath),
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point),
+                Padding = new Padding(5, 2, 5, 2),
+                Location = new Point(xPos + 20, 3),
+                AutoSize = true,
+                ForeColor = ThemeHelper.DarkForeground,
+                BackColor = first ? Color.FromArgb(15, 255, 255, 255) : ThemeHelper.MonokaiColors.Dark.BACKGROUND
+            };
 
-            // Fill out the file properties
-            labelFileName.Text = Path.GetFileName(filepath);
-            labelFileName.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelFileName.Padding = new Padding(5, 2, 5, 2);
-            labelFileName.Location = new Point(xPos + 20, 3);
-            labelFileName.AutoSize = true;
-            labelFileName.ForeColor = ThemeHelper.DarkForeground;
-            labelFileName.BackColor = first ? Color.FromArgb(15, 255, 255, 255) : ThemeHelper.MonokaiColors.Dark.BACKGROUND;
             // Add listeners and filepath as data-tag
             labelFileName.MouseEnter += FileLabel_OnMouseOver;
             labelFileName.MouseLeave += FileLabel_OnMouseExit;
@@ -288,7 +321,8 @@ namespace Lab_Feedback
             }
 
             // Capture paths of located project files
-            var filePaths = FileHandler.SearchCppFiles(path, exclusions);
+            // var filePaths = FileHandler.SearchCppFiles(path, exclusions);
+            var filePaths = FileHandler.SearchHeaderFiles(path, exclusions);
 
             // For each found file
             foreach (var fp in filePaths)
@@ -409,7 +443,14 @@ namespace Lab_Feedback
             if (e.Button != MouseButtons.Left) return;
 
             ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+
+            IntPtr result = SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+
+            if (result == IntPtr.Zero)
+            {
+                // SendMessage Failed
+            };
+
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -435,15 +476,16 @@ namespace Lab_Feedback
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HTCAPTION = 0x2;
 
-        [DllImport("User32.dll")]
-        private static extern bool ReleaseCapture();
+        [LibraryImport("User32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static partial bool ReleaseCapture();
 
-        [DllImport("User32.dll")]
-        private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16)]
+        private static partial IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
 
         // Rounded corners
-        [System.Runtime.InteropServices.DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern System.IntPtr CreateRoundRectRgn
+        [LibraryImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static partial System.IntPtr CreateRoundRectRgn
         (
             int nLeftRect, // x-coordinate of upper-left corner
             int nTopRect, // y-coordinate of upper-left corner
@@ -452,7 +494,8 @@ namespace Lab_Feedback
             int nWidthEllipse, // height of ellipse
             int nHeightEllipse // width of ellipse
         );
-        [System.Runtime.InteropServices.DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
-        private static extern bool DeleteObject(System.IntPtr hObject);
+        [LibraryImport("gdi32.dll", EntryPoint = "DeleteObject")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static partial bool DeleteObject(System.IntPtr hObject);
     }
 }

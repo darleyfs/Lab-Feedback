@@ -71,7 +71,7 @@ namespace Lab_Feedback
 
                         // MessageBox.Show($"Extracted and deleted: {Folder.GetFileName(zipFile)}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         // MessageBox.Show($"An error occurred while processing {Path.GetFileName(zipFile)}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
