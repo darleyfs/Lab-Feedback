@@ -444,13 +444,7 @@ namespace Lab_Feedback
 
             ReleaseCapture();
 
-            IntPtr result = SendMessage(Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
-
-            if (result == IntPtr.Zero)
-            {
-                // SendMessage Failed
-            };
-
+            SendMessageW(this.Handle, WM_NCLBUTTONDOWN, (IntPtr)HTCAPTION, IntPtr.Zero);
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -481,7 +475,7 @@ namespace Lab_Feedback
         private static partial bool ReleaseCapture();
 
         [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16)]
-        private static partial IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        private static partial IntPtr SendMessageW(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
         // Rounded corners
         [LibraryImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
