@@ -219,6 +219,7 @@ namespace Lab_Feedback
                 "resource.h",
                 "LLMChecker.h",
                 "ProgressBar.h",
+                "Result.h",
                 "Results.h",
                 "ResultsLib.h",
                 "LabTestUtils.h",
@@ -226,7 +227,9 @@ namespace Lab_Feedback
                 "Console.cpp"
             };
 
-            if (name.StartsWith("Lab ") || name.StartsWith("Practical"))
+            
+
+            if (name.StartsWith("Lab ") || name.StartsWith("Midterm") || name.StartsWith("Final"))
             {
                 PopulateCodeViewLabels(name, path, exclusions);
 
@@ -245,11 +248,25 @@ namespace Lab_Feedback
                         filePath = FileHandler.SearchFile(path, "Submission.cpp");
                     }
                 }
-                else
+
+                // TODO: Make this more generic eventually.
+                if (name.StartsWith("Midterm"))
                 {
-                    // Otherwise, it's a Practical and use the CPP.
-                    filePath = FileHandler.SearchFile(path, $"{name}.cpp");
+                    filePath = FileHandler.SearchFile(path, "HighScore_Table.cpp");
                 }
+
+                if (name.StartsWith("Final"))
+                {
+                    filePath = FileHandler.SearchFile(path, "RPG_Shop.cpp");
+                }
+
+                // TODO: Why is this still firing?
+                //else
+                //{
+                //    // Otherwise, it's a Practical and use the CPP.
+                //    filePath = FileHandler.SearchFile(path, $"{name}.cpp");
+                //    MessageBox.Show(filePath);
+                //}
             }
 
             if (string.IsNullOrEmpty(path)) return;
@@ -450,7 +467,7 @@ namespace Lab_Feedback
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            // _BoarderRaduis can be adjusted to your needs, try 15 to start.
+            // _BoarderRadius can be adjusted to your needs, try 15 to start.
             System.IntPtr ptr =
                 CreateRoundRectRgn(0, 0, Width, Height, 15, 15);
 
