@@ -44,7 +44,7 @@ namespace Lab_Feedback
                 var subfolderName = Path.GetFileName(entry);
 
                 // Check if the subfolder name contains "Lab" or "Practical"
-                if (subfolderName.StartsWith("Lab ") || subfolderName.StartsWith("Practical"))
+                if (subfolderName.StartsWith("Lab ") || subfolderName.Contains("Practical"))
                     // Check if the subfolder name contains "Lab" or "Practical"
                 {
                     Assignment assignment = new(subfolderName, entry);
