@@ -259,6 +259,7 @@ namespace Lab_Feedback
                 var text = System.IO.File.ReadAllText(@filePath);
 
                 richTextBoxCodeView.Text = (string.IsNullOrEmpty(text)) ? "" : text;
+                richTextBoxCodeView.ReadOnly = true;
                 buttonOpenWindow.Visible = true;
             }
             else
@@ -412,6 +413,7 @@ namespace Lab_Feedback
             var text = System.IO.File.ReadAllText(@path);
 
             richTextBoxCodeView.Text = (string.IsNullOrEmpty(text)) ? "" : text;
+            richTextBoxCodeView.ReadOnly = true;
         }
 
         private void CloseButton_OnMouseOverEnter(object sender, EventArgs e)

@@ -46,6 +46,7 @@ namespace Lab_Feedback
         private void FormCodeView_Load(object sender, EventArgs e)
         {
             richTextBoxCodeFullView.Text = codeText;
+            richTextBoxCodeFullView.ReadOnly = true;
             Text = titleText;
         }
     }
