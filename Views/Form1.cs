@@ -10,6 +10,9 @@ using WinFormsSyntaxHighlighter;
 using System.DirectoryServices.ActiveDirectory;
 using System.Xml.Linq;
 using static System.Net.WebRequestMethods;
+using Lab_Feedback.Views.Components;
+using Lab_Feedback.Models;
+using Lab_Feedback.Services;
 
 namespace Lab_Feedback
 {
@@ -168,7 +171,7 @@ namespace Lab_Feedback
             base.OnFormClosed(e);
         }
 
-        private void ListBoxStudentsSelectedIndexChanged(object sender, EventArgs e)
+        private async void ListBoxStudentsSelectedIndexChanged(object sender, EventArgs e)
         {
             var path = ((Student)listBoxStudents.SelectedItem!)?.Folder;
 
@@ -176,7 +179,7 @@ namespace Lab_Feedback
             if (path == null) return;
 
             // Search folder for ZIP files, extract and delete them
-            ZipFileHandler.ExtractZipFilesInFolder(path);
+            bool success = await ZipFileHandler.ExtractZipFilesInFolderWithProgressAsync(path, ParentForm);
 
             var assignments = Assignment.FindLabOrPracticalSubfolders(path);
 
