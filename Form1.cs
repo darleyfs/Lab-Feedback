@@ -227,7 +227,6 @@ namespace Lab_Feedback
                 "Console.cpp"
             };
 
-            
 
             if (name.StartsWith("Lab ") || name.StartsWith("Midterm") || name.StartsWith("Final"))
             {
@@ -277,12 +276,39 @@ namespace Lab_Feedback
 
                 richTextBoxCodeView.Text = (string.IsNullOrEmpty(text)) ? "" : text;
                 richTextBoxCodeView.ReadOnly = true;
+
                 buttonOpenWindow.Visible = true;
             }
             else
             {
-                MessageBox.Show( "There may be a problem with the folder structure.\n\nDo you want to open this folder? (This isn't implemented yet)", "Error opening file path.");
+                MessageBox.Show("There may be a problem with the folder structure.\n\nDo you want to open this folder? (This isn't implemented yet)", "Error opening file path.");
             }
+
+            // TODO: Put this in a better place
+            var violations = new List<string> {
+                     "&", "const", "static_cast", "reinterpret_cast", "dynamic_cast",
+                    "resize()", "ignore()", "clear()", "auto", "try", "size_t", "goto",
+                    "catch", "\0", "(...)", "var", "continue", "iterator"
+            };
+
+            ViolationsMatcher violationsMatcher = new ViolationsMatcher(violations);
+            int violationsCount = violationsMatcher.CountMatches(richTextBoxCodeView.Text);
+
+            toolStripStatusViolationsCount.Text = violationsCount.ToString();
+
+
+            if (violationsCount > 3)
+            {
+                toolStripStatusViolationsCount.ForeColor = Color.Red;
+            } else if (violationsCount > 0)
+            {
+                toolStripStatusViolationsCount.ForeColor = Color.Orange;
+            } else
+            {
+                toolStripStatusViolationsCount.ForeColor = 
+                    (ThemeHelper.IsLightTheme()) ? ThemeHelper.LightForeground : ThemeHelper.DarkForeground;
+            }
+
         }
 
         private void RemoveExistingLabels()
@@ -302,7 +328,8 @@ namespace Lab_Feedback
         private Label CreateCodeViewLabel(string filepath, int xPos, bool first = false)
         {
             // Create a new label
-            var labelFileName = new Label {
+            var labelFileName = new Label
+            {
                 // Fill out the file properties
                 Text = Path.GetFileName(filepath),
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point),
@@ -373,12 +400,14 @@ namespace Lab_Feedback
 
                 toolStripStatusBuildsValue.Text = results.Count.ToString();
                 toolStripStatusScoreValue.Text = results[resultsSize - 1].Number.ToString();
+
             }
             else
             {
                 MessageBox.Show("Build logs not found for " + projectName + ".");
                 toolStripStatusBuildsValue.Text = "N/A";
                 toolStripStatusScoreValue.Text = "N/A";
+                toolStripStatusViolationsCount.Text = "0";
             }
         }
 

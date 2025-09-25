@@ -140,7 +140,10 @@ namespace Lab_Feedback
 
             // Flags
             syntaxHighlighter.AddPattern(
-                new PatternDefinition("&", "const", "static_cast", "auto"),
+                new PatternDefinition(
+                    "&", "const", "static_cast", "reinterpret_cast", "dynamic_cast",
+                    "resize()", "ignore()", "clear()", "auto", "try", "size_t", "goto", 
+                    "catch", "\0", "(...)", "var", "continue", "iterator"),
                 new SyntaxStyle(Color.Red, true, false));
         }
     }

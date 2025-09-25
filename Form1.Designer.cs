@@ -52,6 +52,8 @@
             toolStripStatusScoreValue = new ToolStripStatusLabel();
             toolStripStatusBuildsLabel = new ToolStripStatusLabel();
             toolStripStatusBuildsValue = new ToolStripStatusLabel();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            toolStripStatusViolationsCount = new ToolStripStatusLabel();
             contextMenuStripNewWindow = new ContextMenuStrip(components);
             menuStripMain.SuspendLayout();
             panelStudents.SuspendLayout();
@@ -215,7 +217,7 @@
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusSpacerLabel, toolStripStatusScoreLabel, toolStripStatusScoreValue, toolStripStatusBuildsLabel, toolStripStatusBuildsValue });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusSpacerLabel, toolStripStatusBuildsLabel, toolStripStatusBuildsValue, toolStripStatusLabel1, toolStripStatusViolationsCount, toolStripStatusScoreLabel, toolStripStatusScoreValue });
             statusStrip1.Location = new Point(0, 452);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(1051, 22);
@@ -224,7 +226,7 @@
             // toolStripStatusSpacerLabel
             // 
             toolStripStatusSpacerLabel.Name = "toolStripStatusSpacerLabel";
-            toolStripStatusSpacerLabel.Size = new Size(857, 17);
+            toolStripStatusSpacerLabel.Size = new Size(596, 17);
             toolStripStatusSpacerLabel.Spring = true;
             toolStripStatusSpacerLabel.TextImageRelation = TextImageRelation.TextBeforeImage;
             // 
@@ -255,6 +257,18 @@
             toolStripStatusBuildsValue.Padding = new Padding(0, 0, 15, 0);
             toolStripStatusBuildsValue.Size = new Size(44, 17);
             toolStripStatusBuildsValue.Text = "N/A";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(112, 17);
+            toolStripStatusLabel1.Text = "Potential Violations:";
+            // 
+            // toolStripStatusViolationsCount
+            // 
+            toolStripStatusViolationsCount.Name = "toolStripStatusViolationsCount";
+            toolStripStatusViolationsCount.Size = new Size(13, 17);
+            toolStripStatusViolationsCount.Text = "0";
             // 
             // contextMenuStripNewWindow
             // 
@@ -318,5 +332,7 @@
         private Button buttonOpenWindow;
         private RichTextBox richTextBoxCodeView;
         private ContextMenuStrip contextMenuStripNewWindow;
+        private ToolStripStatusLabel toolStripStatusLabel1;
+        private ToolStripStatusLabel toolStripStatusViolationsCount;
     }
 }
