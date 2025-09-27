@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab_Feedback
+namespace Lab_Feedback.Models
 {
     internal class Result
     { 

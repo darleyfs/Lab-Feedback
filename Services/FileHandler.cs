@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Lab_Feedback.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab_Feedback
+namespace Lab_Feedback.Services
 {
     internal class FileHandler
     {
@@ -104,7 +105,7 @@ namespace Lab_Feedback
 
             var index = subFolder.IndexOf(path, StringComparison.Ordinal);
 
-            return (index < 0) ? subFolder : subFolder.Remove(index, path.Length + 1);
+            return index < 0 ? subFolder : subFolder.Remove(index, path.Length + 1);
         }
 
     }
