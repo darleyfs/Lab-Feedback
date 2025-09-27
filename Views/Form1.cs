@@ -39,6 +39,7 @@ namespace Lab_Feedback
             SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
             FormBorderStyle = FormBorderStyle.None;
             DoubleBuffered = true;
+            statusStrip1.ShowItemToolTips = true;
 
             (new DropShadow()).ApplyShadows(this);
 
@@ -296,9 +297,10 @@ namespace Lab_Feedback
 
             ViolationsMatcher violationsMatcher = new ViolationsMatcher(violations);
             int violationsCount = violationsMatcher.CountMatches(richTextBoxCodeView.Text);
+            string violtationsContext = violationsMatcher.GetMatchesWithContext(richTextBoxCodeView.Text, 50);
 
             toolStripStatusViolationsCount.Text = violationsCount.ToString();
-
+            toolStripStatusViolationsCount.ToolTipText = violtationsContext;
 
             if (violationsCount > 3)
             {
