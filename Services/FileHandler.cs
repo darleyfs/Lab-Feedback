@@ -79,9 +79,10 @@ namespace Lab_Feedback.Services
 
             // Search for all .cpp and header files in the specified path and subdirectories
             var headerFiles = Directory.GetFiles(path, "*.h", SearchOption.AllDirectories);
+            var hppFiles = Directory.GetFiles(path, "*.hpp", SearchOption.AllDirectories);
             var cppFiles = Directory.GetFiles(path, "*.cpp", SearchOption.AllDirectories);
 
-            var files = headerFiles.Concat(cppFiles).ToArray();
+            var files = headerFiles.Concat(cppFiles).Concat(hppFiles).ToArray();
 
             foreach (var file in files)
             {
