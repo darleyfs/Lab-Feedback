@@ -170,7 +170,7 @@ namespace Lab_Feedback
 
             var student = (Student)listBoxStudents.SelectedItem;
             
-            Clipboard.SetText($"{student.FullName}\t{student.IdNumber}");
+            Clipboard.SetText($"{student.FirstName} {student.LastName}\t{student.IdNumber}");
         }
 
         private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
