@@ -190,8 +190,6 @@ namespace Lab_Feedback
         {
             var path = ((Student)listBoxStudents.SelectedItem!)?.Folder;
 
-            MessageBox.Show(path);
-
             // Search folder for Lab projects
             if (path == null) return;
 
@@ -200,7 +198,6 @@ namespace Lab_Feedback
 
             var assignments = Assignment.FindLabOrPracticalSubfolders(path);
 
-            MessageBox.Show($"Found {assignments.Count} assignments for this student.");
 
             // Clear Assignment list
             listBoxAssignments.Items.Clear();
@@ -210,8 +207,6 @@ namespace Lab_Feedback
             {
                 listBoxAssignments.Items.Add(assignment);
             }
-
-            MessageBox.Show("Finished loading assignments.");
         }
 
         private void ListBoxAssignments_SelectedIndexChanged(object sender, EventArgs e)
@@ -229,6 +224,10 @@ namespace Lab_Feedback
             // Ignore boiler-plate files
             var exclusions = new List<string>
             {
+                "DONOTUSEANYTHINGINTHISFILE.h",
+                "Source.h",
+                "Helper.cpp",
+                "Helper.h",
                 "Source.cpp",
                 "Test.cpp",
                 "Test.h",
