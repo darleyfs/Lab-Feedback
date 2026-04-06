@@ -20,6 +20,7 @@ namespace Lab_Feedback
     {
         ContextMenuStrip contextMenu;
         ToolStripMenuItem openInFileExplorer;
+        ToolStripMenuItem copyStudentNameAndNumber;
         Panel titleBar;
         Label titleLabel;
         Button closeButton;
@@ -126,20 +127,25 @@ namespace Lab_Feedback
             // Create context menu and menu item
             contextMenu = new ContextMenuStrip();
             openInFileExplorer = new ToolStripMenuItem("Open in File Explorer");
+            copyStudentNameAndNumber = new ToolStripMenuItem("Copy Student Name and ID number");
 
             // Add menu item to context menu
             contextMenu.Items.Add(openInFileExplorer);
+            contextMenu.Items.Add(copyStudentNameAndNumber);
+
+            // TODO: Copy both Student name and ID number to paste into Excel columns
+
 
             // Attach context menu to ListBox
             listBoxStudents.ContextMenuStrip = contextMenu;
 
             // Attach event handler for menu item click
             openInFileExplorer.Click += OpenInFileExplorer_Click;
+            copyStudentNameAndNumber.Click += CopyStudentNameAndNumber_Click;
         }
 
         private void OpenInFileExplorer_Click(object? sender, EventArgs e)
         {
-
             // Ensure an item is selected
             if (listBoxStudents.SelectedItem == null) return;
 
@@ -156,6 +162,15 @@ namespace Lab_Feedback
             {
                 MessageBox.Show("Invalid file path or file does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void CopyStudentNameAndNumber_Click(object? sender, EventArgs e)
+        {
+            if (listBoxStudents.SelectedItem == null) return;
+
+            var student = (Student)listBoxStudents.SelectedItem;
+            
+            Clipboard.SetText($"{student.FullName}\t{student.IdNumber}");
         }
 
         private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
@@ -184,6 +199,7 @@ namespace Lab_Feedback
 
             var assignments = Assignment.FindLabOrPracticalSubfolders(path);
 
+
             // Clear Assignment list
             listBoxAssignments.Items.Clear();
 
@@ -209,6 +225,10 @@ namespace Lab_Feedback
             // Ignore boiler-plate files
             var exclusions = new List<string>
             {
+                "DONOTUSEANYTHINGINTHISFILE.h",
+                "Source.h",
+                "Helper.cpp",
+                "Helper.h",
                 "Source.cpp",
                 "Test.cpp",
                 "Test.h",
@@ -305,12 +325,14 @@ namespace Lab_Feedback
             if (violationsCount > 3)
             {
                 toolStripStatusViolationsCount.ForeColor = Color.Red;
-            } else if (violationsCount > 0)
+            }
+            else if (violationsCount > 0)
             {
                 toolStripStatusViolationsCount.ForeColor = Color.Orange;
-            } else
+            }
+            else
             {
-                toolStripStatusViolationsCount.ForeColor = 
+                toolStripStatusViolationsCount.ForeColor =
                     (ThemeHelper.IsLightTheme()) ? ThemeHelper.LightForeground : ThemeHelper.DarkForeground;
             }
 
@@ -544,5 +566,10 @@ namespace Lab_Feedback
         [LibraryImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool DeleteObject(System.IntPtr hObject);
+
+        private void panelStudents_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
