@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab_Feedback
+namespace Lab_Feedback.Views.Components
 {
     internal class DropShadow
     {
@@ -46,11 +46,11 @@ namespace Lab_Feedback
 
         [DllImport("dwmapi.dll")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
+        public static extern int DwmExtendFrameIntoClientArea(nint hWnd, ref MARGINS pMarInset);
 
         [DllImport("dwmapi.dll")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+        public static extern int DwmSetWindowAttribute(nint hwnd, int attr, ref int attrValue, int attrSize);
 
         [DllImport("dwmapi.dll")]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -75,7 +75,7 @@ namespace Lab_Feedback
         private static extern int DwmIsCompositionEnabled(out bool enabled);
 
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn
+        private static extern nint CreateRoundRectRgn
         (
             int nLeftRect,
             int nTopRect,
@@ -92,7 +92,7 @@ namespace Lab_Feedback
                 int enabled = 0;
                 DwmIsCompositionEnabled(ref enabled);
 
-                return (enabled == 1) ? true : false;
+                return enabled == 1 ? true : false;
             }
             return false;
         }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Lab_Feedback.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab_Feedback
+namespace Lab_Feedback.Services
 {
     internal class FileHandler
     {
@@ -78,9 +79,10 @@ namespace Lab_Feedback
 
             // Search for all .cpp and header files in the specified path and subdirectories
             var headerFiles = Directory.GetFiles(path, "*.h", SearchOption.AllDirectories);
+            var hppFiles = Directory.GetFiles(path, "*.hpp", SearchOption.AllDirectories);
             var cppFiles = Directory.GetFiles(path, "*.cpp", SearchOption.AllDirectories);
 
-            var files = headerFiles.Concat(cppFiles).ToArray();
+            var files = headerFiles.Concat(cppFiles).Concat(hppFiles).ToArray();
 
             foreach (var file in files)
             {
@@ -104,7 +106,7 @@ namespace Lab_Feedback
 
             var index = subFolder.IndexOf(path, StringComparison.Ordinal);
 
-            return (index < 0) ? subFolder : subFolder.Remove(index, path.Length + 1);
+            return index < 0 ? subFolder : subFolder.Remove(index, path.Length + 1);
         }
 
     }

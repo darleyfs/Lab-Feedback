@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Lab_Feedback.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab_Feedback
+namespace Lab_Feedback.Models
 {
     internal class Student
     {

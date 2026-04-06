@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices.JavaScript;
 
-namespace Lab_Feedback
+namespace Lab_Feedback.Models
 {
     internal class Assignment
     {

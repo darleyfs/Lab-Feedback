@@ -1,8 +1,9 @@
 ﻿using Microsoft.Win32;
 using System.Drawing;
+using Lab_Feedback.Views.Components;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
-namespace Lab_Feedback {
+namespace Lab_Feedback.Services {
 
     internal class ThemeHelper
     {
@@ -14,7 +15,7 @@ namespace Lab_Feedback {
 
         public static void ApplyTheme(Form form)
         {
-            var isLightTheme = ThemeHelper.IsLightTheme();
+            var isLightTheme = IsLightTheme();
 
             if (isLightTheme)
             {

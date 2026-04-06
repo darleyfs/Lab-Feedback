@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinFormsSyntaxHighlighter;
 
-namespace Lab_Feedback
+namespace Lab_Feedback.Services
 {
     internal class MonokaiSyntaxHighlighter : SyntaxHighlighter
     {

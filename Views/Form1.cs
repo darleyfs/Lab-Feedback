@@ -10,6 +10,9 @@ using WinFormsSyntaxHighlighter;
 using System.DirectoryServices.ActiveDirectory;
 using System.Xml.Linq;
 using static System.Net.WebRequestMethods;
+using Lab_Feedback.Views.Components;
+using Lab_Feedback.Models;
+using Lab_Feedback.Services;
 
 namespace Lab_Feedback
 {
@@ -17,6 +20,7 @@ namespace Lab_Feedback
     {
         ContextMenuStrip contextMenu;
         ToolStripMenuItem openInFileExplorer;
+        ToolStripMenuItem copyStudentNameAndNumber;
         Panel titleBar;
         Label titleLabel;
         Button closeButton;
@@ -36,6 +40,7 @@ namespace Lab_Feedback
             SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
             FormBorderStyle = FormBorderStyle.None;
             DoubleBuffered = true;
+            statusStrip1.ShowItemToolTips = true;
 
             (new DropShadow()).ApplyShadows(this);
 
@@ -122,20 +127,25 @@ namespace Lab_Feedback
             // Create context menu and menu item
             contextMenu = new ContextMenuStrip();
             openInFileExplorer = new ToolStripMenuItem("Open in File Explorer");
+            copyStudentNameAndNumber = new ToolStripMenuItem("Copy Student Name and ID number");
 
             // Add menu item to context menu
             contextMenu.Items.Add(openInFileExplorer);
+            contextMenu.Items.Add(copyStudentNameAndNumber);
+
+            // TODO: Copy both Student name and ID number to paste into Excel columns
+
 
             // Attach context menu to ListBox
             listBoxStudents.ContextMenuStrip = contextMenu;
 
             // Attach event handler for menu item click
             openInFileExplorer.Click += OpenInFileExplorer_Click;
+            copyStudentNameAndNumber.Click += CopyStudentNameAndNumber_Click;
         }
 
         private void OpenInFileExplorer_Click(object? sender, EventArgs e)
         {
-
             // Ensure an item is selected
             if (listBoxStudents.SelectedItem == null) return;
 
@@ -154,6 +164,15 @@ namespace Lab_Feedback
             }
         }
 
+        private void CopyStudentNameAndNumber_Click(object? sender, EventArgs e)
+        {
+            if (listBoxStudents.SelectedItem == null) return;
+
+            var student = (Student)listBoxStudents.SelectedItem;
+            
+            Clipboard.SetText($"{student.FullName}\t{student.IdNumber}");
+        }
+
         private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
         {
             if (e.Category == UserPreferenceCategory.General)
@@ -168,7 +187,7 @@ namespace Lab_Feedback
             base.OnFormClosed(e);
         }
 
-        private void ListBoxStudentsSelectedIndexChanged(object sender, EventArgs e)
+        private async void ListBoxStudentsSelectedIndexChanged(object sender, EventArgs e)
         {
             var path = ((Student)listBoxStudents.SelectedItem!)?.Folder;
 
@@ -176,9 +195,10 @@ namespace Lab_Feedback
             if (path == null) return;
 
             // Search folder for ZIP files, extract and delete them
-            ZipFileHandler.ExtractZipFilesInFolder(path);
+            bool success = await ZipFileHandler.ExtractZipFilesInFolderWithProgressAsync(path, ParentForm);
 
             var assignments = Assignment.FindLabOrPracticalSubfolders(path);
+
 
             // Clear Assignment list
             listBoxAssignments.Items.Clear();
@@ -205,6 +225,10 @@ namespace Lab_Feedback
             // Ignore boiler-plate files
             var exclusions = new List<string>
             {
+                "DONOTUSEANYTHINGINTHISFILE.h",
+                "Source.h",
+                "Helper.cpp",
+                "Helper.h",
                 "Source.cpp",
                 "Test.cpp",
                 "Test.h",
@@ -293,19 +317,22 @@ namespace Lab_Feedback
 
             ViolationsMatcher violationsMatcher = new ViolationsMatcher(violations);
             int violationsCount = violationsMatcher.CountMatches(richTextBoxCodeView.Text);
+            string violtationsContext = violationsMatcher.GetMatchesWithContext(richTextBoxCodeView.Text, 50);
 
             toolStripStatusViolationsCount.Text = violationsCount.ToString();
-
+            toolStripStatusViolationsCount.ToolTipText = violtationsContext;
 
             if (violationsCount > 3)
             {
                 toolStripStatusViolationsCount.ForeColor = Color.Red;
-            } else if (violationsCount > 0)
+            }
+            else if (violationsCount > 0)
             {
                 toolStripStatusViolationsCount.ForeColor = Color.Orange;
-            } else
+            }
+            else
             {
-                toolStripStatusViolationsCount.ForeColor = 
+                toolStripStatusViolationsCount.ForeColor =
                     (ThemeHelper.IsLightTheme()) ? ThemeHelper.LightForeground : ThemeHelper.DarkForeground;
             }
 
@@ -539,5 +566,10 @@ namespace Lab_Feedback
         [LibraryImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool DeleteObject(System.IntPtr hObject);
+
+        private void panelStudents_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
