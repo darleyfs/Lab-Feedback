@@ -35,6 +35,23 @@ namespace Lab_Feedback.Services {
             }
         }
 
+        /// <summary>
+        /// Searches the immediate child controls of the specified parent for a control with the given name and returns
+        /// it if found and of the specified type.
+        /// </summary>
+        /// <remarks>This method searches only the immediate children of the parent control and does not
+        /// perform a recursive search. If multiple controls share the same name, only the first match is
+        /// returned.</remarks>
+        /// <typeparam name="T">The type of control to search for. Must derive from Control.</typeparam>
+        /// <param name="parent">The parent control whose immediate children are searched.</param>
+        /// <param name="name">The name of the control to find. The search is case-sensitive.</param>
+        /// <returns>The first control of type T with the specified name if found; otherwise, null.</returns>
+        private static T? FindControl<T>(Control parent, string name) where T : Control
+        {
+            var results = parent.Controls.Find(name, false);
+            return results.Length > 0 ? results[0] as T : null;
+        }
+
         public static bool IsLightTheme()
         {
             try
@@ -76,11 +93,18 @@ namespace Lab_Feedback.Services {
                 ApplyThemeToContextMenus(form);
             }
 
-            var studentPanel = form.Controls.Find("panelStudents", false);
-            if(studentPanel.Length > 0) studentPanel[0].BackColor = Color.FromArgb(26, 26, 26);
+            var sc1 = FindControl<SplitContainer>(form, "splitContainer1");
+            var sc2 = FindControl<SplitContainer>(sc1?.Panel1, "splitContainer2");
+            var panel = FindControl<Panel>(sc2?.Panel1, "panelStudents");
+            var table = FindControl<TableLayoutPanel>(panel, "tableLayoutStudents");
 
-            var studentLabel = form.Controls.Find("labelStudents", false);
-            if(studentLabel.Length > 0) studentLabel[0].BackColor = Color.FromArgb(26, 26, 26);
+            if (table != null) table.BackColor = Color.FromArgb(26, 26, 26);
+
+            var topPanel = FindControl<Panel>(table, "panelStudentsTop");
+            if(topPanel != null) topPanel.BackColor = Color.FromArgb(26, 26, 26);
+
+            var studentLabel = FindControl<Label>(topPanel, "labelStudents");
+            if (studentLabel != null) studentLabel.BackColor = Color.FromArgb(26, 26, 26);
         }
 
         public static void ApplyBackColorToListBox(ListBox listBox)

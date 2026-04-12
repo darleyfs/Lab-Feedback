@@ -50,9 +50,22 @@ namespace Lab_Feedback.Services
             if (panel != null)
             {
                 panel.BackColor = ThemeHelper.MonokaiColors.Dark.BACKGROUND;
-                var buttonNewWindow = panel.Controls.Find("buttonOpenWindow", false);
-                if (buttonNewWindow.Length > 0) buttonNewWindow[0].BackColor = ThemeHelper.MonokaiColors.Dark.BACKGROUND;
+
+                // TODO: This is incredible sloppy but it works for now.
+                var panelCodeViewTop = panel.Controls.Find("panelCodeViewTop", false);
+                if (panelCodeViewTop.Length > 0 && panelCodeViewTop[0] is Panel topPanel)
+                {
+                    topPanel.BackColor = ThemeHelper.MonokaiColors.Dark.BACKGROUND;
+
+                    var buttonNewWindow = topPanel.Controls.Find("buttonOpenWindow", false);
+
+                    if (buttonNewWindow.Length > 0 && buttonNewWindow[0] is Control btn)
+                    {
+                        btn.BackColor = ThemeHelper.MonokaiColors.Dark.BACKGROUND;
+                    }
+                }
             }
+
             if (label != null) label.BackColor = ThemeHelper.MonokaiColors.Dark.BACKGROUND;
         }
 

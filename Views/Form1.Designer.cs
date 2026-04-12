@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            Panel panelCodeViewTop;
+            buttonOpenWindow = new Button();
+            labelCodeView = new Label();
             folderBrowserDialog1 = new FolderBrowserDialog();
             menuStripMain = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
@@ -48,15 +51,20 @@
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
             panelStudents = new Panel();
+            tableLayoutStudents = new TableLayoutPanel();
             listBoxStudents = new ListBox();
+            panelStudentsTop = new Panel();
             labelStudents = new Label();
             panelAssignments = new Panel();
+            tableLayoutAssignments = new TableLayoutPanel();
             listBoxAssignments = new ListBox();
+            panelAssignmentsTop = new Panel();
             labelAssignments = new Label();
             panelCodeView = new Panel();
+            tableLayoutCodeView = new TableLayoutPanel();
             richTextBoxCodeView = new RichTextBox();
-            buttonOpenWindow = new Button();
-            labelCodeView = new Label();
+            panelCodeViewTop = new Panel();
+            panelCodeViewTop.SuspendLayout();
             menuStripMain.SuspendLayout();
             statusStrip1.SuspendLayout();
             contextMenuStripNewWindow.SuspendLayout();
@@ -69,9 +77,48 @@
             splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
             panelStudents.SuspendLayout();
+            tableLayoutStudents.SuspendLayout();
+            panelStudentsTop.SuspendLayout();
             panelAssignments.SuspendLayout();
+            tableLayoutAssignments.SuspendLayout();
+            panelAssignmentsTop.SuspendLayout();
             panelCodeView.SuspendLayout();
+            tableLayoutCodeView.SuspendLayout();
             SuspendLayout();
+            // 
+            // panelCodeViewTop
+            // 
+            panelCodeViewTop.Controls.Add(buttonOpenWindow);
+            panelCodeViewTop.Controls.Add(labelCodeView);
+            panelCodeViewTop.Dock = DockStyle.Fill;
+            panelCodeViewTop.Location = new Point(15, 3);
+            panelCodeViewTop.Name = "panelCodeViewTop";
+            panelCodeViewTop.Size = new Size(555, 24);
+            panelCodeViewTop.TabIndex = 17;
+            // 
+            // buttonOpenWindow
+            // 
+            buttonOpenWindow.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonOpenWindow.FlatAppearance.BorderSize = 0;
+            buttonOpenWindow.FlatStyle = FlatStyle.Flat;
+            buttonOpenWindow.Location = new Point(507, 0);
+            buttonOpenWindow.Name = "buttonOpenWindow";
+            buttonOpenWindow.Size = new Size(51, 22);
+            buttonOpenWindow.TabIndex = 16;
+            buttonOpenWindow.Text = "· · ·";
+            buttonOpenWindow.UseVisualStyleBackColor = true;
+            buttonOpenWindow.Visible = false;
+            buttonOpenWindow.Click += ButtonOpenWindow_Click;
+            // 
+            // labelCodeView
+            // 
+            labelCodeView.AutoSize = true;
+            labelCodeView.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            labelCodeView.Location = new Point(3, 4);
+            labelCodeView.Name = "labelCodeView";
+            labelCodeView.Size = new Size(71, 15);
+            labelCodeView.TabIndex = 15;
+            labelCodeView.Text = "CODE VIEW";
             // 
             // menuStripMain
             // 
@@ -212,9 +259,8 @@
             // 
             // panelStudents
             // 
-            panelStudents.BackColor = SystemColors.MenuHighlight;
-            panelStudents.Controls.Add(listBoxStudents);
-            panelStudents.Controls.Add(labelStudents);
+            panelStudents.BackColor = SystemColors.Window;
+            panelStudents.Controls.Add(tableLayoutStudents);
             panelStudents.Dock = DockStyle.Fill;
             panelStudents.Location = new Point(0, 0);
             panelStudents.Margin = new Padding(1);
@@ -223,32 +269,58 @@
             panelStudents.Size = new Size(224, 656);
             panelStudents.TabIndex = 9;
             // 
+            // tableLayoutStudents
+            // 
+            tableLayoutStudents.ColumnCount = 1;
+            tableLayoutStudents.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutStudents.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutStudents.Controls.Add(listBoxStudents, 0, 1);
+            tableLayoutStudents.Controls.Add(panelStudentsTop, 0, 0);
+            tableLayoutStudents.Dock = DockStyle.Fill;
+            tableLayoutStudents.Location = new Point(0, 2);
+            tableLayoutStudents.Name = "tableLayoutStudents";
+            tableLayoutStudents.Padding = new Padding(12, 0, 0, 0);
+            tableLayoutStudents.RowCount = 2;
+            tableLayoutStudents.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutStudents.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutStudents.Size = new Size(224, 654);
+            tableLayoutStudents.TabIndex = 5;
+            // 
             // listBoxStudents
             // 
             listBoxStudents.BorderStyle = BorderStyle.None;
+            listBoxStudents.Dock = DockStyle.Fill;
             listBoxStudents.FormattingEnabled = true;
             listBoxStudents.ItemHeight = 15;
-            listBoxStudents.Location = new Point(12, 26);
+            listBoxStudents.Location = new Point(15, 33);
             listBoxStudents.Name = "listBoxStudents";
-            listBoxStudents.Size = new Size(208, 630);
-            listBoxStudents.TabIndex = 2;
+            listBoxStudents.Size = new Size(206, 618);
+            listBoxStudents.TabIndex = 3;
             listBoxStudents.SelectedIndexChanged += ListBoxStudentsSelectedIndexChanged;
+            // 
+            // panelStudentsTop
+            // 
+            panelStudentsTop.Controls.Add(labelStudents);
+            panelStudentsTop.Dock = DockStyle.Fill;
+            panelStudentsTop.Location = new Point(15, 3);
+            panelStudentsTop.Name = "panelStudentsTop";
+            panelStudentsTop.Size = new Size(206, 24);
+            panelStudentsTop.TabIndex = 0;
             // 
             // labelStudents
             // 
             labelStudents.AutoSize = true;
             labelStudents.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelStudents.Location = new Point(10, 7);
+            labelStudents.Location = new Point(-3, 4);
             labelStudents.Name = "labelStudents";
             labelStudents.Size = new Size(68, 15);
-            labelStudents.TabIndex = 4;
+            labelStudents.TabIndex = 5;
             labelStudents.Text = "STUDENTS";
             // 
             // panelAssignments
             // 
             panelAssignments.BackColor = SystemColors.Window;
-            panelAssignments.Controls.Add(listBoxAssignments);
-            panelAssignments.Controls.Add(labelAssignments);
+            panelAssignments.Controls.Add(tableLayoutAssignments);
             panelAssignments.Dock = DockStyle.Fill;
             panelAssignments.Location = new Point(0, 0);
             panelAssignments.Name = "panelAssignments";
@@ -256,33 +328,57 @@
             panelAssignments.Size = new Size(295, 656);
             panelAssignments.TabIndex = 10;
             // 
+            // tableLayoutAssignments
+            // 
+            tableLayoutAssignments.ColumnCount = 1;
+            tableLayoutAssignments.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutAssignments.Controls.Add(listBoxAssignments, 0, 1);
+            tableLayoutAssignments.Controls.Add(panelAssignmentsTop, 0, 0);
+            tableLayoutAssignments.Dock = DockStyle.Fill;
+            tableLayoutAssignments.Location = new Point(0, 2);
+            tableLayoutAssignments.Name = "tableLayoutAssignments";
+            tableLayoutAssignments.Padding = new Padding(12, 0, 0, 0);
+            tableLayoutAssignments.RowCount = 2;
+            tableLayoutAssignments.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutAssignments.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutAssignments.Size = new Size(295, 654);
+            tableLayoutAssignments.TabIndex = 6;
+            // 
             // listBoxAssignments
             // 
             listBoxAssignments.BorderStyle = BorderStyle.None;
+            listBoxAssignments.Dock = DockStyle.Fill;
             listBoxAssignments.FormattingEnabled = true;
             listBoxAssignments.ItemHeight = 15;
-            listBoxAssignments.Location = new Point(13, 26);
+            listBoxAssignments.Location = new Point(15, 33);
             listBoxAssignments.Name = "listBoxAssignments";
-            listBoxAssignments.Size = new Size(279, 630);
-            listBoxAssignments.TabIndex = 3;
+            listBoxAssignments.Size = new Size(277, 618);
+            listBoxAssignments.TabIndex = 7;
             listBoxAssignments.SelectedIndexChanged += ListBoxAssignments_SelectedIndexChanged;
+            // 
+            // panelAssignmentsTop
+            // 
+            panelAssignmentsTop.Controls.Add(labelAssignments);
+            panelAssignmentsTop.Dock = DockStyle.Fill;
+            panelAssignmentsTop.Location = new Point(15, 3);
+            panelAssignmentsTop.Name = "panelAssignmentsTop";
+            panelAssignmentsTop.Size = new Size(277, 24);
+            panelAssignmentsTop.TabIndex = 8;
             // 
             // labelAssignments
             // 
             labelAssignments.AutoSize = true;
             labelAssignments.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelAssignments.Location = new Point(13, 7);
+            labelAssignments.Location = new Point(0, 4);
             labelAssignments.Name = "labelAssignments";
             labelAssignments.Size = new Size(91, 15);
-            labelAssignments.TabIndex = 5;
+            labelAssignments.TabIndex = 7;
             labelAssignments.Text = "ASSIGNMENTS";
             // 
             // panelCodeView
             // 
             panelCodeView.BackColor = SystemColors.Window;
-            panelCodeView.Controls.Add(richTextBoxCodeView);
-            panelCodeView.Controls.Add(buttonOpenWindow);
-            panelCodeView.Controls.Add(labelCodeView);
+            panelCodeView.Controls.Add(tableLayoutCodeView);
             panelCodeView.Dock = DockStyle.Fill;
             panelCodeView.Location = new Point(0, 0);
             panelCodeView.Name = "panelCodeView";
@@ -290,51 +386,48 @@
             panelCodeView.Size = new Size(573, 656);
             panelCodeView.TabIndex = 11;
             // 
+            // tableLayoutCodeView
+            // 
+            tableLayoutCodeView.ColumnCount = 1;
+            tableLayoutCodeView.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutCodeView.Controls.Add(richTextBoxCodeView, 0, 1);
+            tableLayoutCodeView.Controls.Add(panelCodeViewTop, 0, 0);
+            tableLayoutCodeView.Dock = DockStyle.Fill;
+            tableLayoutCodeView.Location = new Point(0, 2);
+            tableLayoutCodeView.Name = "tableLayoutCodeView";
+            tableLayoutCodeView.Padding = new Padding(12, 0, 0, 0);
+            tableLayoutCodeView.RowCount = 2;
+            tableLayoutCodeView.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutCodeView.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutCodeView.Size = new Size(573, 654);
+            tableLayoutCodeView.TabIndex = 15;
+            // 
             // richTextBoxCodeView
             // 
             richTextBoxCodeView.BorderStyle = BorderStyle.None;
+            richTextBoxCodeView.Dock = DockStyle.Fill;
             richTextBoxCodeView.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            richTextBoxCodeView.Location = new Point(13, 36);
+            richTextBoxCodeView.ImeMode = ImeMode.Off;
+            richTextBoxCodeView.Location = new Point(15, 33);
             richTextBoxCodeView.Name = "richTextBoxCodeView";
-            richTextBoxCodeView.Size = new Size(557, 617);
-            richTextBoxCodeView.TabIndex = 10;
+            richTextBoxCodeView.Size = new Size(555, 618);
+            richTextBoxCodeView.TabIndex = 18;
             richTextBoxCodeView.Text = "";
-            // 
-            // buttonOpenWindow
-            // 
-            buttonOpenWindow.FlatAppearance.BorderSize = 0;
-            buttonOpenWindow.FlatStyle = FlatStyle.Flat;
-            buttonOpenWindow.Location = new Point(567, 5);
-            buttonOpenWindow.Name = "buttonOpenWindow";
-            buttonOpenWindow.Size = new Size(51, 22);
-            buttonOpenWindow.TabIndex = 9;
-            buttonOpenWindow.Text = "· · ·";
-            buttonOpenWindow.UseVisualStyleBackColor = true;
-            buttonOpenWindow.Visible = false;
-            // 
-            // labelCodeView
-            // 
-            labelCodeView.AutoSize = true;
-            labelCodeView.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            labelCodeView.Location = new Point(13, 7);
-            labelCodeView.Name = "labelCodeView";
-            labelCodeView.Size = new Size(71, 15);
-            labelCodeView.TabIndex = 7;
-            labelCodeView.Text = "CODE VIEW";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
-            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(1100, 678);
             Controls.Add(splitContainer1);
             Controls.Add(statusStrip1);
             Controls.Add(menuStripMain);
             Name = "Form1";
-            SizeGripStyle = SizeGripStyle.Hide;
             Text = "Form1";
             Load += Form1_Load;
             Paint += Form1_Paint;
+            panelCodeViewTop.ResumeLayout(false);
+            panelCodeViewTop.PerformLayout();
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
             statusStrip1.ResumeLayout(false);
@@ -349,11 +442,15 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
             panelStudents.ResumeLayout(false);
-            panelStudents.PerformLayout();
+            tableLayoutStudents.ResumeLayout(false);
+            panelStudentsTop.ResumeLayout(false);
+            panelStudentsTop.PerformLayout();
             panelAssignments.ResumeLayout(false);
-            panelAssignments.PerformLayout();
+            tableLayoutAssignments.ResumeLayout(false);
+            panelAssignmentsTop.ResumeLayout(false);
+            panelAssignmentsTop.PerformLayout();
             panelCodeView.ResumeLayout(false);
-            panelCodeView.PerformLayout();
+            tableLayoutCodeView.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -380,14 +477,20 @@
         private SplitContainer splitContainer1;
         private SplitContainer splitContainer2;
         private Panel panelStudents;
-        private ListBox listBoxStudents;
-        private Label labelStudents;
         private Panel panelAssignments;
-        private ListBox listBoxAssignments;
-        private Label labelAssignments;
         private Panel panelCodeView;
+        private Panel panelCodeViewTop;
+        private TableLayoutPanel tableLayoutCodeView;
         private RichTextBox richTextBoxCodeView;
         private Button buttonOpenWindow;
         private Label labelCodeView;
+        private TableLayoutPanel tableLayoutAssignments;
+        private ListBox listBoxAssignments;
+        private Panel panelAssignmentsTop;
+        private Label labelAssignments;
+        private TableLayoutPanel tableLayoutStudents;
+        private ListBox listBoxStudents;
+        private Panel panelStudentsTop;
+        private Label labelStudents;
     }
 }

@@ -26,7 +26,6 @@ namespace Lab_Feedback
         Button closeButton;
         Button minimizeButton;
         Button maximizeButton;
-
         private Label selectedLabel;
 
         public Form1()
@@ -44,7 +43,7 @@ namespace Lab_Feedback
 
             (new DropShadow()).ApplyShadows(this);
 
-            var syntaxHighlighter = MonokaiSyntaxHighlighter.NewInstance(richTextBoxCodeView, panelCodeView, labelCodeView);
+            var syntaxHighlighter = MonokaiSyntaxHighlighter.NewInstance(richTextBoxCodeView, tableLayoutCodeView, labelCodeView);
         }
 
         private void InitializeCustomTitleBar()
@@ -59,7 +58,7 @@ namespace Lab_Feedback
             titleBar.BackColor = Color.FromArgb(37, 37, 38);
             titleBar.Dock = DockStyle.Top;
             titleBar.Height = 30;
-            titleBar.Width = 100;
+            // titleBar.Width = 100;
             titleBar.MouseDown += TitleBar_MouseDown;
 
             // Title label
@@ -74,7 +73,10 @@ namespace Lab_Feedback
             minimizeButton.BackColor = Color.FromArgb(37, 37, 38);
             minimizeButton.FlatStyle = FlatStyle.Flat;
             minimizeButton.FlatAppearance.BorderSize = 0;
-            minimizeButton.Location = new Point(this.Width - 150, 0);
+            //minimizeButton.Location = new Point(this.Width - 150, 0);
+            //minimizeButton.Size = new Size(45, 30);
+            minimizeButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            minimizeButton.Location = new Point(titleBar.Width - 150, 0);
             minimizeButton.Size = new Size(45, 30);
             minimizeButton.Click += new EventHandler(MinimizeButton_Click);
 
@@ -84,7 +86,10 @@ namespace Lab_Feedback
             maximizeButton.BackColor = Color.FromArgb(37, 37, 38);
             maximizeButton.FlatStyle = FlatStyle.Flat;
             maximizeButton.FlatAppearance.BorderSize = 0;
-            maximizeButton.Location = new Point(this.Width - 105, 0);
+            //maximizeButton.Location = new Point(this.Width - 105, 0);
+            //maximizeButton.Size = new Size(45, 30);
+            maximizeButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            maximizeButton.Location = new Point(titleBar.Width - 105, 0);
             maximizeButton.Size = new Size(45, 30);
             maximizeButton.Click += new EventHandler(MaximizeButton_Click);
 
@@ -94,7 +99,10 @@ namespace Lab_Feedback
             closeButton.BackColor = Color.FromArgb(37, 37, 38);
             closeButton.FlatStyle = FlatStyle.Flat;
             closeButton.FlatAppearance.BorderSize = 0;
-            closeButton.Location = new Point(this.Width - 60, 0);
+            //closeButton.Location = new Point(this.Width - 60, 0);
+            //closeButton.Size = new Size(45, 30);
+            closeButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            closeButton.Location = new Point(titleBar.Width - 60, 0);
             closeButton.Size = new Size(45, 30);
             closeButton.Click += new EventHandler(CloseButton_Click);
             closeButton.MouseEnter += CloseButton_OnMouseOverEnter;
@@ -478,6 +486,7 @@ namespace Lab_Feedback
 
         private void FileLabel_OnClick(object sender, EventArgs e)
         {
+
             selectedLabel.BackColor = ThemeHelper.MonokaiColors.Dark.BACKGROUND;
             selectedLabel = (Label)sender;
 
@@ -524,11 +533,11 @@ namespace Lab_Feedback
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             // _BoarderRadius can be adjusted to your needs, try 15 to start.
-            System.IntPtr ptr =
-                CreateRoundRectRgn(0, 0, Width, Height, 15, 15);
+            //System.IntPtr ptr =
+            //    CreateRoundRectRgn(0, 0, Width, Height, 15, 15);
 
-            Region = System.Drawing.Region.FromHrgn(ptr);
-            DeleteObject(ptr);
+            //Region = System.Drawing.Region.FromHrgn(ptr);
+            //DeleteObject(ptr);
         }
 
         private void ButtonOpenWindow_Click(object sender, EventArgs e)
@@ -567,9 +576,59 @@ namespace Lab_Feedback
         [return: MarshalAs(UnmanagedType.Bool)]
         private static partial bool DeleteObject(System.IntPtr hObject);
 
-        private void panelStudents_Paint(object sender, PaintEventArgs e)
+        // Hacky stuff to make this window resizable?
+        protected override void WndProc(ref Message m)
         {
+            const int WM_NCHITTEST = 0x84;
+            const int WM_NCCALCSIZE = 0x83;
+            const int borderWidth = 8;
 
+            //if (m.Msg == WM_NCCALCSIZE)
+            //{
+            //    m.Result = IntPtr.Zero;
+            //    return;
+            //}
+
+            base.WndProc(ref m);
+
+            if (m.Msg != WM_NCHITTEST) return;
+
+            // Use screen coordinates from the message, not Cursor.Position
+            int x = (int)(m.LParam.ToInt64() & 0xFFFF);
+            int y = (int)((m.LParam.ToInt64() >> 16) & 0xFFFF);
+            var cursor = PointToClient(new Point(x, y));
+
+            bool onLeft = cursor.X < borderWidth;
+            bool onRight = cursor.X >= Width - borderWidth;
+            bool onTop = cursor.Y < borderWidth;
+            bool onBottom = cursor.Y >= Height - borderWidth;
+
+            if (!onLeft && !onRight && !onTop && !onBottom) return;
+
+            m.Result = (onLeft, onTop, onRight, onBottom) switch
+            {
+                (true, true, _, _) => (IntPtr)13,
+                (_, true, true, _) => (IntPtr)14,
+                (true, _, _, true) => (IntPtr)16,
+                (_, _, true, true) => (IntPtr)17,
+                (true, _, _, _) => (IntPtr)10,
+                (_, _, true, _) => (IntPtr)11,
+                (_, true, _, _) => (IntPtr)12,
+                (_, _, _, true) => (IntPtr)15,
+                _ => m.Result
+            };
+
+            Debug.WriteLine($"Edge hit: {m.Result}, cursor: {cursor}");
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                cp.Style |= 0x00040000; // WS_SIZEBOX / WS_THICKFRAME
+                return cp;
+            }
         }
     }
 }

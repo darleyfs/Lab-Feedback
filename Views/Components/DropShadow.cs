@@ -109,10 +109,10 @@ namespace Lab_Feedback.Views.Components
 
             MARGINS margins = new MARGINS()
             {
-                bottomHeight = 1,
+                bottomHeight = 0,
                 leftWidth = 0,
                 rightWidth = 0,
-                topHeight = 0
+                topHeight = 0  // was 0
             };
 
             DwmExtendFrameIntoClientArea(form.Handle, ref margins);
