@@ -15,41 +15,32 @@ namespace Lab_Feedback.Services {
 
         public static void ApplyTheme(Form form)
         {
-            var isLightTheme = IsLightTheme();
+            var isLight = IsLightTheme();
+            var back = isLight ? LightBackground : DarkBackground;
+            var fore = isLight ? LightForeground : DarkForeground;
 
-            if (isLightTheme)
-            {
-                form.BackColor = LightBackground;
-                form.ForeColor = LightForeground;
+            foreach (Control control in form.Controls)
+                ApplyThemeToControl(control, back, fore, isLight);
 
-                // Apply light theme styles to other controls
-                ApplyLightThemeToControls(form);
-            }
-            else
-            {
-                form.BackColor = DarkBackground;
-                form.ForeColor = DarkForeground;
+            ApplyThemeToContextMenus(form, isLight);
 
-                // Apply dark theme styles to other controls
-                ApplyDarkThemeToControls(form);
-            }
+            if (form is IThemeable themeable)
+                themeable.ApplyTheme(isLight);
         }
 
-        /// <summary>
-        /// Searches the immediate child controls of the specified parent for a control with the given name and returns
-        /// it if found and of the specified type.
-        /// </summary>
-        /// <remarks>This method searches only the immediate children of the parent control and does not
-        /// perform a recursive search. If multiple controls share the same name, only the first match is
-        /// returned.</remarks>
-        /// <typeparam name="T">The type of control to search for. Must derive from Control.</typeparam>
-        /// <param name="parent">The parent control whose immediate children are searched.</param>
-        /// <param name="name">The name of the control to find. The search is case-sensitive.</param>
-        /// <returns>The first control of type T with the specified name if found; otherwise, null.</returns>
-        private static T? FindControl<T>(Control parent, string name) where T : Control
+        private static void ApplyThemeToControl(Control control, Color back, Color fore, bool isLight)
         {
-            var results = parent.Controls.Find(name, false);
-            return results.Length > 0 ? results[0] as T : null;
+            if (control is IThemeable themeable)
+            {
+                themeable.ApplyTheme(isLight);
+                return;
+            }
+
+            control.BackColor = back;
+            control.ForeColor = fore;
+
+            foreach (Control sub in control.Controls)
+                ApplyThemeToControl(sub, back, fore, isLight);
         }
 
         public static bool IsLightTheme()
@@ -74,37 +65,6 @@ namespace Lab_Feedback.Services {
 
             // Default to light theme if there's an issue accessing the registry
             return true;
-        }
-
-        private static void ApplyLightThemeToControls(Form form)
-        {
-            foreach (Control control in form.Controls)
-            {
-                ApplyLightThemeToControl(control);
-                ApplyThemeToContextMenus(form, true);
-            }
-        }
-
-        private static void ApplyDarkThemeToControls(Form form)
-        {
-            foreach (Control control in form.Controls)
-            {
-                ApplyDarkThemeToControl(control);
-                ApplyThemeToContextMenus(form);
-            }
-
-            var sc1 = FindControl<SplitContainer>(form, "splitContainer1");
-            var sc2 = FindControl<SplitContainer>(sc1?.Panel1, "splitContainer2");
-            var panel = FindControl<Panel>(sc2?.Panel1, "panelStudents");
-            var table = FindControl<TableLayoutPanel>(panel, "tableLayoutStudents");
-
-            if (table != null) table.BackColor = Color.FromArgb(26, 26, 26);
-
-            var topPanel = FindControl<Panel>(table, "panelStudentsTop");
-            if(topPanel != null) topPanel.BackColor = Color.FromArgb(26, 26, 26);
-
-            var studentLabel = FindControl<Label>(topPanel, "labelStudents");
-            if (studentLabel != null) studentLabel.BackColor = Color.FromArgb(26, 26, 26);
         }
 
         public static void ApplyBackColorToListBox(ListBox listBox)
@@ -228,6 +188,5 @@ namespace Lab_Feedback.Services {
             public Color PINK { get; set; }
             public Color BLUE { get; set; }
         }
-
     }
 }

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            Panel panelCodeViewTop;
             buttonOpenWindow = new Button();
             labelCodeView = new Label();
             folderBrowserDialog1 = new FolderBrowserDialog();

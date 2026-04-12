@@ -411,7 +411,7 @@ namespace Lab_Feedback
                 var labelFileName = CreateCodeViewLabel(fp, xPos, first);
 
                 // Add the label to the panel
-                panelCodeView.Controls.Add(labelFileName);
+                panelCodeViewTop.Controls.Add(labelFileName);
 
                 // If it's the first file mark it as selected
                 if (first)
